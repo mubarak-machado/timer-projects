@@ -2,6 +2,7 @@ import { useProjects } from "@/hooks/useProjects";
 import { useSessions } from "@/hooks/useSessions";
 import { useTimerStore } from "@/store/timer";
 import { Button } from "@/components/ui/button";
+import { ManualEntry } from "@/components/ManualEntry";
 import {
   formatDuration,
   formatCost,
@@ -10,6 +11,7 @@ import {
   formatTime,
   getElapsedSeconds,
 } from "@/lib/utils";
+import { exportProjectSessionsToCSV, downloadCSV } from "@/lib/export";
 import { useEffect, useState } from "react";
 
 interface ProjectDetailProps {
@@ -25,6 +27,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
   const startTimer = useTimerStore((s) => s.startTimer);
   const stopTimer = useTimerStore((s) => s.stopTimer);
   const [elapsed, setElapsed] = useState(0);
+  const [showManualEntry, setShowManualEntry] = useState(false);
 
   const project = getProject(projectId);
   const sessions = getSessionsByProject(projectId);
@@ -41,6 +44,18 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
   }, [activeSession, projectId]);
 
   if (!project) return null;
+
+  if (showManualEntry) {
+    return (
+      <ManualEntry
+        onCancel={() => setShowManualEntry(false)}
+        onSave={(data) => {
+          addSession({ projeto_id: projectId, ...data });
+          setShowManualEntry(false);
+        }}
+      />
+    );
+  }
 
   const handleStartTimer = () => {
     if (activeSession && activeSession.projetoId !== projectId) {
@@ -71,6 +86,12 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
     }
   };
 
+  const handleExportCSV = () => {
+    const csv = exportProjectSessionsToCSV(project, sessions);
+    const filename = `${project.nome.replace(/[^a-zA-Z0-9]/g, "_")}_historico.csv`;
+    downloadCSV(csv, filename);
+  };
+
   const cost = calculateCost(totalSeconds, project.taxa_horaria);
   const sessionCost = calculateCost(
     isTimerRunning ? elapsed : 0,
@@ -89,8 +110,8 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         </button>
         <div className="flex-1 min-w-0">
           <h1
-            className="text-xl font-bold truncate"
-            style={{ fontSize: "var(--font-size-lg)" }}
+            className="font-bold"
+            style={{ fontSize: "var(--font-size-lg)", color: "var(--color-text-primary)" }}
           >
             {project.nome}
           </h1>
@@ -116,7 +137,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
 
         {isTimerRunning && project.taxa_horaria && (
           <div
-            className="text-2xl mb-4"
+            className="mb-4"
             style={{ fontSize: "var(--font-size-cost)", color: "var(--color-success)" }}
           >
             {formatCost(sessionCost)}
@@ -126,7 +147,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         {isTimerRunning ? (
           <Button
             onClick={handleStopTimer}
-            className="w-full h-16 text-xl font-bold"
+            className="w-full h-16 font-bold"
             style={{
               backgroundColor: "var(--color-danger)",
               fontSize: "var(--font-size-lg)",
@@ -137,7 +158,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         ) : (
           <Button
             onClick={handleStartTimer}
-            className="w-full h-16 text-xl font-bold"
+            className="w-full h-16 font-bold"
             style={{
               backgroundColor: "var(--color-success)",
               fontSize: "var(--font-size-lg)",
@@ -148,6 +169,35 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         )}
       </div>
 
+      {/* Action Buttons */}
+      <div className="grid grid-cols-2 gap-3 mb-6">
+        <Button
+          variant="secondary"
+          onClick={() => setShowManualEntry(true)}
+          className="h-14"
+          style={{
+            backgroundColor: "var(--color-surface-2)",
+            color: "var(--color-text-primary)",
+            fontSize: "var(--font-size-base)",
+          }}
+        >
+          + Manual
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={handleExportCSV}
+          disabled={sessions.length === 0}
+          className="h-14"
+          style={{
+            backgroundColor: "var(--color-surface-2)",
+            color: sessions.length === 0 ? "var(--color-text-secondary)" : "var(--color-text-primary)",
+            fontSize: "var(--font-size-base)",
+          }}
+        >
+          Exportar CSV
+        </Button>
+      </div>
+
       {/* Project Stats */}
       <div
         className="rounded-xl p-4 mb-6 flex justify-between items-center"
@@ -155,7 +205,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
       >
         <div>
           <div
-            className="text-sm mb-1"
+            className="mb-1"
             style={{
               fontSize: "var(--font-size-meta)",
               color: "var(--color-text-secondary)",
@@ -164,7 +214,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
             Total acumulado
           </div>
           <div
-            className="text-2xl font-bold"
+            className="font-bold"
             style={{ fontSize: "var(--font-size-cost)", color: "var(--color-text-primary)" }}
           >
             {formatDuration(totalSeconds)}
@@ -173,7 +223,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
         {cost > 0 && (
           <div className="text-right">
             <div
-              className="text-sm mb-1"
+              className="mb-1"
               style={{
                 fontSize: "var(--font-size-meta)",
                 color: "var(--color-text-secondary)",
@@ -182,7 +232,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
               Custo total
             </div>
             <div
-              className="text-2xl font-bold"
+              className="font-bold"
               style={{ fontSize: "var(--font-size-cost)", color: "var(--color-accent)" }}
             >
               {formatCost(cost)}
@@ -193,14 +243,14 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
 
       {/* Session History */}
       <h2
-        className="text-lg font-bold mb-3"
-        style={{ fontSize: "var(--font-size-lg)" }}
+        className="mb-3 font-bold"
+        style={{ fontSize: "var(--font-size-lg)", color: "var(--color-text-primary)" }}
       >
         Histórico
       </h2>
       <div className="space-y-2">
         {sessions.length === 0 ? (
-          <p style={{ color: "var(--color-text-secondary)" }}>
+          <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-base)" }}>
             Nenhuma sessão registrada.
           </p>
         ) : (
@@ -233,7 +283,7 @@ export function ProjectDetail({ projectId, onBack }: ProjectDetailProps) {
               </div>
               {session.nota && (
                 <div
-                  className="mt-2 text-base"
+                  className="mt-2"
                   style={{
                     color: "var(--color-text-primary)",
                     fontSize: "var(--font-size-base)",

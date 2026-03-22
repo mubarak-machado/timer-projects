@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AreaList } from "@/components/AreaList";
 import { ProjectList } from "@/components/ProjectList";
 import { ProjectDetail } from "@/components/ProjectDetail";
 import { ActiveTimerBanner } from "@/components/ActiveTimerBanner";
+import { DesktopSidebar } from "@/components/DesktopSidebar";
+import { DesktopProjectView } from "@/components/DesktopProjectView";
 import { useTimerStore } from "@/store/timer";
-import { useProjects } from "@/hooks/useProjects";
 
 type Page =
   | { view: "areas" }
@@ -13,8 +14,17 @@ type Page =
 
 function App() {
   const [page, setPage] = useState<Page>({ view: "areas" });
+  const [isDesktop, setIsDesktop] = useState(false);
   const activeSession = useTimerStore((s) => s.activeSession);
-  const { getProject } = useProjects();
+
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
+  }, []);
 
   const navigateToProject = (projectId: string) => {
     setPage({ view: "project", projectId });
@@ -22,6 +32,45 @@ function App() {
 
   const showBanner = activeSession && page.view !== "project";
 
+  // Desktop layout: sidebar + main area
+  if (isDesktop) {
+    return (
+      <div
+        className="flex h-screen"
+        style={{ backgroundColor: "var(--color-bg)" }}
+      >
+        {showBanner && (
+          <ActiveTimerBanner
+            onClick={() =>
+              setPage({ view: "project", projectId: activeSession.projetoId })
+            }
+          />
+        )}
+
+        <DesktopSidebar
+          selectedProjectId={page.view === "project" ? page.projectId : null}
+          onSelectProject={navigateToProject}
+        />
+
+        <main className="flex-1 overflow-hidden">
+          {page.view === "project" ? (
+            <DesktopProjectView projectId={page.projectId} />
+          ) : (
+            <div
+              className="h-full flex items-center justify-center"
+              style={{ color: "var(--color-text-secondary)" }}
+            >
+              <p style={{ fontSize: "var(--font-size-lg)" }}>
+                Selecione um projeto na barra lateral
+              </p>
+            </div>
+          )}
+        </main>
+      </div>
+    );
+  }
+
+  // Mobile layout: stacked pages
   return (
     <div
       className="min-h-screen"
@@ -54,12 +103,8 @@ function App() {
           <ProjectDetail
             projectId={page.projectId}
             onBack={() => {
-              const project = getProject(page.projectId);
-              if (project) {
-                setPage({ view: "projects", areaId: project.area_id });
-              } else {
-                setPage({ view: "areas" });
-              }
+              // Navigate back but stay in desktop context won't apply
+              setPage({ view: "areas" });
             }}
           />
         )}
