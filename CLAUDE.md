@@ -153,6 +153,48 @@ Nível 1: Lista de Áreas
 
 ---
 
+## Status de implementação
+
+**Última atualização:** Março 2026
+
+| Etapa | Descrição | Status |
+|-------|-----------|--------|
+| Core MVP | Timer, sessões, áreas, projetos, exportação CSV | ✅ Implementado |
+| Etapa 0 | Persistência do timer no reload + PWA completo | ⏳ Pendente |
+| Etapa 1 | Tela de Configurações + tema claro + controle de fonte | ⏳ Pendente |
+| Etapa 2 | Desktop: sidebar com perspectivas + inspector lateral | ⏳ Pendente |
+| Etapa 3 | UX mobile: edição de sessões, reordenação, paleta de cores | ⏳ Pendente |
+| Etapa 4 | Módulos futuros: Relatórios, Clientes, Faturamento, Supabase | 🔒 Bloqueado |
+
+**Próxima tarefa:** iniciar pela **Etapa 0** — é pré-requisito para todas as demais.
+
+---
+
+## Como retomar a implementação em uma nova sessão
+
+Para iniciar ou continuar o desenvolvimento, use este comando:
+
+> "Leia o CLAUDE.md, identifique a próxima etapa pendente, consulte o arquivo
+> de tasks correspondente em `docs/tarefas/ETAPA-N.md` e implemente a primeira
+> task não concluída. Siga as convenções de código deste arquivo."
+
+**Mapa de documentação:**
+
+| Documento | Conteúdo |
+|-----------|----------|
+| `CLAUDE.md` (este arquivo) | Contexto rápido + status atual |
+| `docs/SDD.md` | Especificação completa do produto |
+| `docs/PLANO-IMPLEMENTACAO.md` | Roadmap por etapas com critérios |
+| `docs/tarefas/ETAPA-0.md` | Tasks: persistência do timer + PWA |
+| `docs/tarefas/ETAPA-1.md` | Tasks: configurações, tema, fonte |
+| `docs/tarefas/ETAPA-2.md` | Tasks: sidebar perspectivas + inspector |
+| `docs/tarefas/ETAPA-3.md` | Tasks: edição de sessões, reordenação, paleta |
+| `docs/tarefas/ETAPA-4.md` | Tasks: módulos futuros (relatórios, clientes) |
+
+**Regra:** ao concluir uma task, atualize a tabela de status acima marcando ✅.
+
+---
+
 ## Para atualizar este arquivo
 
 Peça ao Claude Code: *"Atualize o CLAUDE.md para refletir [decisão/mudança]"*
