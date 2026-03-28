@@ -20,7 +20,7 @@ interface DesktopProjectViewProps {
 
 export function DesktopProjectView({ projectId }: DesktopProjectViewProps) {
   const { getProject } = useProjects();
-  const { getSessionsByProject, getTotalSecondsForProject, addSession } =
+  const { getSessionsByProject, getTotalSecondsForProject, addSession, deleteSession } =
     useSessions();
   const activeSession = useTimerStore((s) => s.activeSession);
   const startTimer = useTimerStore((s) => s.startTimer);
@@ -273,25 +273,41 @@ export function DesktopProjectView({ projectId }: DesktopProjectViewProps) {
                 style={{ backgroundColor: "var(--color-surface)" }}
               >
                 <div
-                  className="flex justify-between items-center mb-1"
+                  className="flex justify-between items-start mb-1"
                   style={{ fontSize: "var(--font-size-meta)" }}
                 >
-                  <span style={{ color: "var(--color-text-secondary)" }}>
-                    {formatDate(new Date(session.inicio))}
-                  </span>
-                  <span
-                    className="font-mono font-medium"
-                    style={{ color: "var(--color-text-primary)" }}
-                  >
-                    {formatDuration(session.duracao_segundos)}
-                  </span>
-                </div>
-                <div
-                  className="text-sm"
-                  style={{ color: "var(--color-text-secondary)" }}
-                >
-                  {formatTime(new Date(session.inicio))} →{" "}
-                  {session.fim ? formatTime(new Date(session.fim)) : "—"}
+                  <div className="flex-1">
+                    <span style={{ color: "var(--color-text-secondary)" }}>
+                      {formatDate(new Date(session.inicio))}
+                    </span>
+                    <div style={{ color: "var(--color-text-secondary)" }}>
+                      {formatTime(new Date(session.inicio))} →{" "}
+                      {session.fim ? formatTime(new Date(session.fim)) : "—"}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 ml-2">
+                    <span
+                      className="font-mono font-medium"
+                      style={{ color: "var(--color-text-primary)", fontSize: "var(--font-size-meta)" }}
+                    >
+                      {formatDuration(session.duracao_segundos)}
+                    </span>
+                    <button
+                      onClick={() => deleteSession(session.id)}
+                      aria-label="Excluir sessão"
+                      style={{
+                        minWidth: "var(--min-touch-target)",
+                        minHeight: "var(--min-touch-target)",
+                        color: "var(--color-danger)",
+                        fontSize: "var(--font-size-meta)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
                 </div>
                 {session.nota && (
                   <div

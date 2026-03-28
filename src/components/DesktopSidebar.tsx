@@ -6,11 +6,13 @@ import { formatDuration } from "@/lib/utils";
 interface DesktopSidebarProps {
   selectedProjectId: string | null;
   onSelectProject: (projectId: string) => void;
+  onSettings: () => void;
 }
 
 export function DesktopSidebar({
   selectedProjectId,
   onSelectProject,
+  onSettings,
 }: DesktopSidebarProps) {
   const { areas } = useAreas();
   const { getProjectsByArea } = useProjects();
@@ -25,15 +27,32 @@ export function DesktopSidebar({
       }}
     >
       <div className="p-4">
-        <h2
-          className="font-bold mb-4"
-          style={{
-            fontSize: "var(--font-size-lg)",
-            color: "var(--color-text-primary)",
-          }}
-        >
-          Áreas
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2
+            className="font-bold"
+            style={{
+              fontSize: "var(--font-size-lg)",
+              color: "var(--color-text-primary)",
+            }}
+          >
+            Áreas
+          </h2>
+          <button
+            onClick={onSettings}
+            aria-label="Configurações"
+            style={{
+              minWidth: "var(--min-touch-target)",
+              minHeight: "var(--min-touch-target)",
+              color: "var(--color-text-secondary)",
+              fontSize: "var(--font-size-lg)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ⚙
+          </button>
+        </div>
 
         {areas.map((area) => {
           const areaProjects = getProjectsByArea(area.id);
@@ -68,20 +87,18 @@ export function DesktopSidebar({
                         className="w-3 h-3 rounded-full flex-shrink-0"
                         style={{ backgroundColor: project.cor }}
                       />
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1">
                         <div
-                          className="font-medium truncate"
+                          className="font-medium"
                           style={{
                             fontSize: "var(--font-size-base)",
-                            color: isSelected
-                              ? "var(--color-text-primary)"
-                              : "var(--color-text-primary)",
+                            color: "var(--color-text-primary)",
+                            wordBreak: "break-word",
                           }}
                         >
                           {project.nome}
                         </div>
                         <div
-                          className="text-sm truncate"
                           style={{
                             fontSize: "var(--font-size-meta)",
                             color: "var(--color-text-secondary)",

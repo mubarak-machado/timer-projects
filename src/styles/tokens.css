@@ -15,6 +15,14 @@
   --radius-pill: 999px;
 }
 
+/* Base font size tokens — referenced by all components via var() */
+:root {
+  --font-size-meta: 1rem;
+  --font-size-base: 1.25rem;
+  --font-size-lg: 1.5rem;
+  --font-size-xl: 1.875rem;
+}
+
 /* Dark theme (default) — High Contrast Black */
 :root,
 .dark {
@@ -116,6 +124,41 @@
   --chart-3: #ff9f0a;
   --chart-4: #ff3b30;
   --chart-5: #bf5af2;
+}
+
+/* Font scale levels — applied via data-font-size on <html> */
+[data-font-size="1"] {
+  --font-size-meta: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-timer: 3rem;
+  --font-size-cost: 1.5rem;
+}
+[data-font-size="2"] {
+  --font-size-meta: 1rem;
+  --font-size-base: 1.125rem;
+  --font-size-lg: 1.375rem;
+  --font-size-xl: 1.625rem;
+  --font-size-timer: 3.5rem;
+  --font-size-cost: 1.75rem;
+}
+/* [data-font-size="3"] is the default — no overrides needed */
+[data-font-size="4"] {
+  --font-size-meta: 1.125rem;
+  --font-size-base: 1.5rem;
+  --font-size-lg: 1.875rem;
+  --font-size-xl: 2.25rem;
+  --font-size-timer: 5rem;
+  --font-size-cost: 2.5rem;
+}
+[data-font-size="5"] {
+  --font-size-meta: 1.25rem;
+  --font-size-base: 1.875rem;
+  --font-size-lg: 2.25rem;
+  --font-size-xl: 2.75rem;
+  --font-size-timer: 6rem;
+  --font-size-cost: 3rem;
 }
 
 @layer base {

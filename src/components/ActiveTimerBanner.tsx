@@ -30,9 +30,9 @@ export function ActiveTimerBanner({ onClick }: ActiveTimerBannerProps) {
       className="fixed top-0 left-0 right-0 z-50 flex items-center justify-center gap-3 py-3 px-4 min-h-[48px] bg-[--color-success] text-white font-medium text-lg"
       style={{ backgroundColor: "var(--color-success)" }}
     >
-      <span className="animate-pulse">●</span>
-      <span className="truncate">{project?.nome ?? "Projeto"}</span>
-      <span className="font-mono">{formatDuration(elapsed)}</span>
+      <span className="animate-pulse flex-shrink-0">●</span>
+      <span className="font-medium" style={{ wordBreak: "break-word" }}>{project?.nome ?? "Projeto"}</span>
+      <span className="font-mono flex-shrink-0">{formatDuration(elapsed)}</span>
     </button>
   );
 }

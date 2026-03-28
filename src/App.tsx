@@ -5,12 +5,14 @@ import { ProjectDetail } from "@/components/ProjectDetail";
 import { ActiveTimerBanner } from "@/components/ActiveTimerBanner";
 import { DesktopSidebar } from "@/components/DesktopSidebar";
 import { DesktopProjectView } from "@/components/DesktopProjectView";
+import { Settings } from "@/components/Settings";
 import { useTimerStore } from "@/store/timer";
 
 type Page =
   | { view: "areas" }
   | { view: "projects"; areaId: string }
-  | { view: "project"; projectId: string };
+  | { view: "project"; projectId: string; fromAreaId?: string }
+  | { view: "settings" };
 
 function App() {
   const [page, setPage] = useState<Page>({ view: "areas" });
@@ -26,8 +28,8 @@ function App() {
     return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
-  const navigateToProject = (projectId: string) => {
-    setPage({ view: "project", projectId });
+  const navigateToProject = (projectId: string, fromAreaId?: string) => {
+    setPage({ view: "project", projectId, fromAreaId });
   };
 
   const showBanner = activeSession && page.view !== "project";
@@ -50,11 +52,16 @@ function App() {
         <DesktopSidebar
           selectedProjectId={page.view === "project" ? page.projectId : null}
           onSelectProject={navigateToProject}
+          onSettings={() => setPage({ view: "settings" })}
         />
 
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 overflow-hidden overflow-y-auto">
           {page.view === "project" ? (
             <DesktopProjectView projectId={page.projectId} />
+          ) : page.view === "settings" ? (
+            <div className="max-w-lg mx-auto">
+              <Settings onBack={() => setPage({ view: "areas" })} />
+            </div>
           ) : (
             <div
               className="h-full flex items-center justify-center"
@@ -88,6 +95,7 @@ function App() {
         {page.view === "areas" && (
           <AreaList
             onSelectArea={(areaId) => setPage({ view: "projects", areaId })}
+            onSettings={() => setPage({ view: "settings" })}
           />
         )}
 
@@ -95,7 +103,7 @@ function App() {
           <ProjectList
             areaId={page.areaId}
             onBack={() => setPage({ view: "areas" })}
-            onSelectProject={navigateToProject}
+            onSelectProject={(projectId) => navigateToProject(projectId, page.areaId)}
           />
         )}
 
@@ -103,10 +111,17 @@ function App() {
           <ProjectDetail
             projectId={page.projectId}
             onBack={() => {
-              // Navigate back but stay in desktop context won't apply
-              setPage({ view: "areas" });
+              if (page.fromAreaId) {
+                setPage({ view: "projects", areaId: page.fromAreaId });
+              } else {
+                setPage({ view: "areas" });
+              }
             }}
           />
+        )}
+
+        {page.view === "settings" && (
+          <Settings onBack={() => setPage({ view: "areas" })} />
         )}
       </div>
     </div>
