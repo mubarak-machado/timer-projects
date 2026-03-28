@@ -153,6 +153,56 @@ Nível 1: Lista de Áreas
 
 ---
 
+## Status de implementação
+
+**Última atualização:** Março 2026
+
+| Etapa | Descrição | Status |
+|-------|-----------|--------|
+| Core MVP | Timer, sessões, áreas, projetos, exportação CSV | ✅ Implementado |
+| Etapa 0 | Persistência do timer no reload + PWA completo | ⏳ Pendente |
+| Etapa 1 | Tela de Configurações + tema claro + controle de fonte | ⏳ Pendente |
+| Etapa 2 | Desktop: sidebar com perspectivas + inspector lateral | ⏳ Pendente |
+| Etapa 3 | UX mobile: edição de sessões, reordenação, paleta de cores | ⏳ Pendente |
+| Etapa 4 | Módulos futuros: Relatórios, Clientes, Faturamento, Supabase | 🔒 Bloqueado |
+
+**Próxima tarefa:** iniciar pela **Etapa 0** — é pré-requisito para todas as demais.
+
+---
+
+## Protocolo de implementação (leia isto antes de qualquer tarefa de código)
+
+Quando o usuário pedir para continuar, implementar, ou iniciar o desenvolvimento
+— seja com "continue", "próxima task", "implemente" ou qualquer variação —
+siga este protocolo sem precisar de instrução adicional:
+
+1. **Leia a tabela de status acima.** Identifique a primeira etapa com status ⏳.
+2. **Abra o arquivo de tasks da etapa:** `docs/tarefas/ETAPA-N.md`
+   (onde N é o número da etapa pendente).
+3. **Leia o arquivo inteiro.** Identifique a primeira task sem `[x]`.
+4. **Implemente a task** seguindo as especificações do arquivo e as convenções
+   deste CLAUDE.md.
+5. **Ao concluir cada task:** marque `[x]` na task dentro do arquivo de tasks
+   E atualize a tabela de status neste CLAUDE.md (⏳ → ✅ quando toda a etapa
+   estiver concluída).
+6. **Ao concluir todas as tasks de uma etapa:** pergunte ao usuário se deve
+   avançar para a próxima etapa ou pausar.
+
+**Mapa de documentação:**
+
+| Documento | Conteúdo |
+|-----------|----------|
+| `CLAUDE.md` (este arquivo) | Contexto rápido + status + protocolo |
+| `docs/SDD.md` | Especificação completa do produto |
+| `docs/PLANO-IMPLEMENTACAO.md` | Roadmap por etapas com critérios |
+| `docs/tarefas/ETAPA-0.md` | Tasks: persistência do timer + PWA |
+| `docs/tarefas/ETAPA-1.md` | Tasks: configurações, tema, fonte |
+| `docs/tarefas/ETAPA-2.md` | Tasks: sidebar perspectivas + inspector |
+| `docs/tarefas/ETAPA-3.md` | Tasks: edição de sessões, reordenação, paleta |
+| `docs/tarefas/ETAPA-4.md` | Tasks: módulos futuros (relatórios, clientes) |
+
+---
+
 ## Para atualizar este arquivo
 
 Peça ao Claude Code: *"Atualize o CLAUDE.md para refletir [decisão/mudança]"*
