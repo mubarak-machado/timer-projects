@@ -6,11 +6,13 @@ import { formatDuration } from "@/lib/utils";
 interface DesktopSidebarProps {
   selectedProjectId: string | null;
   onSelectProject: (projectId: string) => void;
+  onOpenSettings: () => void;
 }
 
 export function DesktopSidebar({
   selectedProjectId,
   onSelectProject,
+  onOpenSettings,
 }: DesktopSidebarProps) {
   const { areas } = useAreas();
   const { getProjectsByArea } = useProjects();
@@ -25,15 +27,25 @@ export function DesktopSidebar({
       }}
     >
       <div className="p-4">
-        <h2
-          className="font-bold mb-4"
-          style={{
-            fontSize: "var(--font-size-lg)",
-            color: "var(--color-text-primary)",
-          }}
-        >
-          Áreas
-        </h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2
+            className="font-bold"
+            style={{
+              fontSize: "var(--font-size-lg)",
+              color: "var(--color-text-primary)",
+            }}
+          >
+            Áreas
+          </h2>
+          <button
+            onClick={onOpenSettings}
+            className="h-10 w-10 flex items-center justify-center rounded-lg"
+            style={{ color: "var(--color-text-secondary)", fontSize: "1.25rem" }}
+            aria-label="Configurações"
+          >
+            ⚙
+          </button>
+        </div>
 
         {areas.map((area) => {
           const areaProjects = getProjectsByArea(area.id);
@@ -70,18 +82,15 @@ export function DesktopSidebar({
                       />
                       <div className="flex-1 min-w-0">
                         <div
-                          className="font-medium truncate"
+                          className="font-medium"
                           style={{
                             fontSize: "var(--font-size-base)",
-                            color: isSelected
-                              ? "var(--color-text-primary)"
-                              : "var(--color-text-primary)",
+                            color: "var(--color-text-primary)",
                           }}
                         >
                           {project.nome}
                         </div>
                         <div
-                          className="text-sm truncate"
                           style={{
                             fontSize: "var(--font-size-meta)",
                             color: "var(--color-text-secondary)",

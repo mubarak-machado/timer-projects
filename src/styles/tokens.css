@@ -15,6 +15,40 @@
   --radius-pill: 999px;
 }
 
+/* Font size levels (1–5) — mínimos absolutos: meta≥1rem, base≥1.25rem, lg≥1.5rem */
+/* Aplicados via data-font-level no elemento <html> */
+:root,
+[data-font-level="1"] {
+  --font-size-meta: 1rem;
+  --font-size-base: 1.25rem;
+  --font-size-lg: 1.5rem;
+  --font-size-xl: 1.875rem;
+}
+[data-font-level="2"] {
+  --font-size-meta: 1.0625rem;
+  --font-size-base: 1.375rem;
+  --font-size-lg: 1.625rem;
+  --font-size-xl: 2rem;
+}
+[data-font-level="3"] {
+  --font-size-meta: 1.125rem;
+  --font-size-base: 1.5rem;
+  --font-size-lg: 1.75rem;
+  --font-size-xl: 2.125rem;
+}
+[data-font-level="4"] {
+  --font-size-meta: 1.25rem;
+  --font-size-base: 1.625rem;
+  --font-size-lg: 1.875rem;
+  --font-size-xl: 2.25rem;
+}
+[data-font-level="5"] {
+  --font-size-meta: 1.375rem;
+  --font-size-base: 1.75rem;
+  --font-size-lg: 2rem;
+  --font-size-xl: 2.5rem;
+}
+
 /* Dark theme (default) — High Contrast Black */
 :root,
 .dark {

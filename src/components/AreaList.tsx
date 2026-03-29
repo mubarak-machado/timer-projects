@@ -4,9 +4,10 @@ import { useState } from "react";
 
 interface AreaListProps {
   onSelectArea: (areaId: string) => void;
+  onOpenSettings: () => void;
 }
 
-export function AreaList({ onSelectArea }: AreaListProps) {
+export function AreaList({ onSelectArea, onOpenSettings }: AreaListProps) {
   const { areas, addArea, deleteArea } = useAreas();
   const [newName, setNewName] = useState("");
   const [isAdding, setIsAdding] = useState(false);
@@ -21,12 +22,22 @@ export function AreaList({ onSelectArea }: AreaListProps) {
 
   return (
     <div className="p-4">
-      <h1
-        className="text-3xl font-bold mb-6"
-        style={{ fontSize: "var(--font-size-xl)" }}
-      >
-        Áreas
-      </h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1
+          className="font-bold"
+          style={{ fontSize: "var(--font-size-xl)", color: "var(--color-text-primary)" }}
+        >
+          Áreas
+        </h1>
+        <button
+          onClick={onOpenSettings}
+          className="h-12 w-12 flex items-center justify-center rounded-lg"
+          style={{ color: "var(--color-text-secondary)", fontSize: "1.5rem" }}
+          aria-label="Configurações"
+        >
+          ⚙
+        </button>
+      </div>
 
       <div className="space-y-2">
         {areas.map((area) => (
